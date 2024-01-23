@@ -1,0 +1,14 @@
+{
+    "tasks": [
+    {
+        "description": "Read a book",
+        "notes": "Choose a book",
+        "important":false
+    },
+    {
+        "description": "Exercise",
+        "notes": "Exercise for 45 minutes",
+        "important": true
+    }
+    ]
+}
