@@ -1,38 +1,44 @@
 
 import jsonData from '../components/task.json';
-console.log(typeof(jsonData));
 
-let newTasks = [{
-  "description": "Get Groceries",
-  "notes": "Buy milk, eggs and avocado",
-  "important": false
-}];
+let newTaks = {
+}
 
-console.log(newTasks);
-
-
-fetch(jsonData).then(response => response.json()).then(data => {
-      // Accessing properties
-      data.tasks.forEach(task => {
-        console.log('Description:', task.description);
-        console.log('Notes:', task.notes);
-      });
-      console.log(typeof(data.tasks));
-
-      data.tasks.push(...newTasks);
-      console.log(data);
+function loadJsonData(){
+  fetch(jsonData).then(response => response.json()).then(data => {
+    // Accessing properties
+    for (const taskKey in data){
+      const task = data[taskKey];
+      createTaskDomElement(task.description,task.notes);
+    } 
 });
+}
 
+function updateJsonData(description,notes){
+  let tempDescription = description;
+  tempDescription = tempDescription.replace(/\s/g,"").toLowerCase();
 
-function createTaskDomElement(){
-    const tasksContainer  = document.createElement('div');
+}
+
+function createTaskDomElement(description,notes){
+
+    const mainContainer = document.querySelector('.mainContainer');
+    const domTasksElement  = document.createElement('div');
+    domTasksElement.classList.add('domTaskElement');
+    domTasksElement.style.display = 'flex';
     const tasksDescription = document.createElement('p');
-    tasksDescription.textContent = newTasks.description;
+    tasksDescription.textContent = description;
+   
     const tasksNotes  = document.createElement('p');
-    tasksNotes.textContent = newTasks.notes;
-    tasksContainer.appendChild(tasksDescription);
-    tasksContainer.appendChild(tasksNotes);
-    return tasksContainer;
+    tasksNotes.textContent = notes
+    const deleteElement = document.createElement('div');
+    deleteElement.classList.add('deleteElement');
+    deleteElement.textContent = 'X';
+
+    domTasksElement.appendChild(tasksDescription);
+    domTasksElement.appendChild(tasksNotes);
+    domTasksElement.appendChild(deleteElement);
+    mainContainer.appendChild(domTasksElement);
 }
 
 
@@ -57,9 +63,12 @@ function createTaskForm(){
     addTaskBtn.textContent  = 'Add Tasks';
 
     //creating new DOM element for tasks buttons
-    addTaskBtn.addEventListener('click', function(){
-      const taskContainer =  document.querySelector('.taskContainer');
-      taskContainer.appendChild(createTaskDomElement());
+    addTaskBtn.addEventListener('click', function(event){
+      event.preventDefault();
+      const taskContainer =  document.querySelector('.mainContainer');
+      createTaskDomElement(taskInput.value,taskNoteInput.value);
+      updateJsonData(taskInput.value,taskNoteInput.value);
+      document.querySelector('.taskForm-popup').style.display = 'none';
     });
 
 
@@ -67,7 +76,8 @@ function createTaskForm(){
     closeTaskBtn.classList.add('closeTaskBtn');
     closeTaskBtn.textContent = 'Close';
 
-   closeTaskBtn.addEventListener('click',function(){
+   closeTaskBtn.addEventListener('click',function(event){
+        event.preventDefault();
         document.querySelector('.taskForm-popup').style.display = 'none';
    });
 
@@ -107,6 +117,7 @@ function tasks(){
 
     mainContainer.appendChild(tasksTitle);
     mainContainer.appendChild(createTaskFormBtn());
+    loadJsonData();
 }
 
 export default tasks;

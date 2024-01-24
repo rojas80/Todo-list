@@ -1,14 +1,13 @@
+
 {
-    "tasks": [
-    {
+    "readabook":{
         "description": "Read a book",
-        "notes": "Choose a book",
-        "important":false
+        "notes": "Choose a book from the library",
+        "important": false
     },
-    {
+    "exercise":{
         "description": "Exercise",
         "notes": "Exercise for 45 minutes",
         "important": true
     }
-    ]
 }
