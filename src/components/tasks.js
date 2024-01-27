@@ -1,31 +1,37 @@
 
 import jsonData from '../components/task.json';
+import { newTasks } from './newData';
 
-let newTaks = {
-}
-
-function loadJsonData(){
+function loadData(){
   fetch(jsonData).then(response => response.json()).then(data => {
     // Accessing properties
     for (const taskKey in data){
       const task = data[taskKey];
       createTaskDomElement(task.description,task.notes);
     } 
-});
+  });
+
+  for(const newTasksKey in newTasks){
+    const newTask = newTasks[newTasksKey];
+    createTaskDomElement(newTask.description,newTask.notes);
+  }
 }
 
-function updateJsonData(description,notes){
+function updateNewTasks(description,notes){
   let tempDescription = description;
   tempDescription = tempDescription.replace(/\s/g,"").toLowerCase();
-
+  newTasks[tempDescription] = {
+    "description": description,
+    "notes": notes,
+    "important": false
+  }
 }
-
 function createTaskDomElement(description,notes){
 
     const mainContainer = document.querySelector('.mainContainer');
     const domTasksElement  = document.createElement('div');
     domTasksElement.classList.add('domTaskElement');
-    domTasksElement.style.display = 'flex';
+    //domTasksElement.style.display = 'flex';
     const tasksDescription = document.createElement('p');
     tasksDescription.textContent = description;
    
@@ -67,8 +73,9 @@ function createTaskForm(){
       event.preventDefault();
       const taskContainer =  document.querySelector('.mainContainer');
       createTaskDomElement(taskInput.value,taskNoteInput.value);
-      updateJsonData(taskInput.value,taskNoteInput.value);
+      updateNewTasks(taskInput.value,taskNoteInput.value);
       document.querySelector('.taskForm-popup').style.display = 'none';
+      console.log(newTasks);
     });
 
 
@@ -114,10 +121,10 @@ function tasks(){
     mainContainer.textContent = '';
     const tasksTitle = document.createElement('h2');
     tasksTitle.textContent = 'Tasks';
-
     mainContainer.appendChild(tasksTitle);
+
     mainContainer.appendChild(createTaskFormBtn());
-    loadJsonData();
+    loadData();
 }
 
 export default tasks;
