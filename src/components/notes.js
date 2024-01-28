@@ -1,14 +1,33 @@
 
-function createNoteDomElement(){
+let newNoteJSON = {
+}
+
+function loadNotesData(){
+    fetch(jsonData).then(response => response.json()).then(data =>{
+        for(const noteKeys in data){
+            const note = data[noteKeys];
+            createNoteDomElement(note.title, note.text);
+        }
+    });
+
+}
+
+function createNoteDomElement(title, text){
     const mainContainer = document.querySelector('.mainContainer');
+    const noteContainer = document.querySelector('.notesContainer');
+
     const domNoteElement = document.createElement('div');
+    domNoteElement.classList.add('note');
 
     const noteTitle = document.createElement('p');
+    noteTitle.textContent = title;
     const noteText = document.createElement('p');
+    noteText.textContent = text;
 
     domNoteElement.appendChild(noteTitle);
     domNoteElement.appendChild(noteText);
-    mainContainer.appendChild(domNoteElement);
+    noteContainer.appendChild(domNoteElement);
+    mainContainer.appendChild(noteContainer);
 }
 
 function createNotesForm(){
@@ -17,9 +36,9 @@ function createNotesForm(){
 
     const noteDescription = document.createElement('label');
     noteDescription.textContent = 'Description';
-
     const notesDescriptionInput = document.createElement('input');
     notesDescriptionInput.type = 'text';
+
     const notesText =  document.createElement('input');
     const addNoteBtn = document.createElement('button');
     addNoteBtn.textContent =  '+Add Note';
@@ -28,8 +47,8 @@ function createNotesForm(){
 
     addNoteBtn.addEventListener('click', function(event){
         event.preventDefault();
-        const notesContainer = document.querySelector('.taskContainer');
-        notesContainer.appendChild(createNoteDomElement());
+        createNoteDomElement(notesDescriptionInput.value, notesText.value);
+        
         document.querySelector('.notesForm-pop').style.display = 'none'
     });
 
@@ -79,4 +98,4 @@ function notes(){
     mainContainer.appendChild(notesContainer);
 }
 
-export default notes;
+export default notes;       

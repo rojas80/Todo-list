@@ -72,6 +72,9 @@ h2,h1{
 }
 /* important */
 /* Notes */
+.notesContainer, .note{
+    border: 1px solid red;
+}
 
 
 /* footer */
