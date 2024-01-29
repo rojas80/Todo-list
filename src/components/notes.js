@@ -1,14 +1,29 @@
 
-let newNoteJSON = {
+import noteJsonData from './notes.json'
+let newNoteJS = {
 }
 
 function loadNotesData(){
-    fetch(jsonData).then(response => response.json()).then(data =>{
+    fetch(noteJsonData).then(response => response.json()).then(data =>{
         for(const noteKeys in data){
             const note = data[noteKeys];
+            newNoteJS[noteKeys] = {
+                "title" : note.title,
+                "text": note.text
+            }
             createNoteDomElement(note.title, note.text);
         }
     });
+
+
+    const retrieveJsonString = localStorage.getItem("notes");
+    const retrieveJsonObject = JSON.parse(retrieveJsonString);
+    
+    for(const key in retrieveJsonObject){
+        console.log("flag");
+        console.log(key);
+    }
+    console.log(retrieveJsonObject);
 
 }
 
@@ -36,10 +51,12 @@ function createNotesForm(){
 
     const noteDescription = document.createElement('label');
     noteDescription.textContent = 'Description';
+
     const notesDescriptionInput = document.createElement('input');
     notesDescriptionInput.type = 'text';
 
     const notesText =  document.createElement('input');
+    notesText.type = 'text';
     const addNoteBtn = document.createElement('button');
     addNoteBtn.textContent =  '+Add Note';
     const closeNoteFormBtn = document.createElement('button');
@@ -48,7 +65,16 @@ function createNotesForm(){
     addNoteBtn.addEventListener('click', function(event){
         event.preventDefault();
         createNoteDomElement(notesDescriptionInput.value, notesText.value);
-        
+        newNoteJS[notesDescriptionInput.value.replace(/\s/g,"").toLocaleLowerCase()] = {
+            "title" : notesDescriptionInput.value,
+            "text" : notesText.value
+        }
+        console.log(newNoteJS);
+
+        const jsonString = JSON.stringify(newNoteJS);
+        localStorage.setItem('notes', jsonString);
+
+
         document.querySelector('.notesForm-pop').style.display = 'none'
     });
 
@@ -96,6 +122,8 @@ function notes(){
     mainContainer.appendChild(notesTitle);
     mainContainer.appendChild(createNotesBtn());
     mainContainer.appendChild(notesContainer);
+    loadNotesData();
+
 }
 
 export default notes;       
