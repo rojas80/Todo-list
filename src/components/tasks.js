@@ -1,37 +1,53 @@
 
 import jsonData from '../components/task.json';
-import { newTasks } from './newData';
+
+let newTasks = {};
 
 function loadData(){
   fetch(jsonData).then(response => response.json()).then(data => {
     // Accessing properties
     for (const taskKey in data){
       const task = data[taskKey];
-      createTaskDomElement(task.description,task.notes);
+      newTasks[taskKey] = {
+        "description": task.description,
+        "notes": task.notes,
+        "Important" : task.important
+      }
+      //createTaskDomElement(task.description,task.notes); delete later
     } 
   });
 
-  for(const newTasksKey in newTasks){
-    const newTask = newTasks[newTasksKey];
-    createTaskDomElement(newTask.description,newTask.notes);
+  const retrieveJsonStringTask = localStorage.getItem("tasks");
+  const retrieveJsonObjectTask = JSON.parse(retrieveJsonStringTask);
+
+  for(const taskKey in retrieveJsonObjectTask){
+
+
+    // const newTask = newTasks[newTasksKey];
+    createTaskDomElement(retrieveJsonObjectTask[taskKey].description,retrieveJsonObjectTask[taskKey].notes);
   }
 }
 
 function updateNewTasks(description,notes){
   let tempDescription = description;
   tempDescription = tempDescription.replace(/\s/g,"").toLowerCase();
+
   newTasks[tempDescription] = {
     "description": description,
     "notes": notes,
     "important": false
   }
+
+  const taskJsonString = JSON.stringify(newTasks);
+  localStorage.setItem('tasks', taskJsonString);
+
 }
 function createTaskDomElement(description,notes){
 
     const mainContainer = document.querySelector('.mainContainer');
     const domTasksElement  = document.createElement('div');
     domTasksElement.classList.add('domTaskElement');
-    //domTasksElement.style.display = 'flex';
+    domTasksElement.style.display = 'flex';
     const tasksDescription = document.createElement('p');
     tasksDescription.textContent = description;
    
@@ -64,6 +80,11 @@ function createTaskForm(){
     const taskNoteInput = document.createElement('input');
     taskNoteInput.type = 'text';
 
+    const isTasksImportant = document.createElement('label');
+    isTasksImportant.textContent = 'Important';
+    const importCheckBoxInput = document.createElement('input');
+    importCheckBoxInput.type ='checkbox';
+
     const addTaskBtn  = document.createElement('button');
     addTaskBtn.classList.add('addTaskBtn');
     addTaskBtn.textContent  = 'Add Tasks';
@@ -71,11 +92,11 @@ function createTaskForm(){
     //creating new DOM element for tasks buttons
     addTaskBtn.addEventListener('click', function(event){
       event.preventDefault();
-      const taskContainer =  document.querySelector('.mainContainer');
       createTaskDomElement(taskInput.value,taskNoteInput.value);
       updateNewTasks(taskInput.value,taskNoteInput.value);
       document.querySelector('.taskForm-popup').style.display = 'none';
-      console.log(newTasks);
+      console.log(importCheckBoxInput.checked);
+
     });
 
 
@@ -94,6 +115,9 @@ function createTaskForm(){
     taskForm.appendChild(document.createElement('br'));
     taskForm.appendChild(taskNote);
     taskForm.appendChild(taskNoteInput);
+    taskForm.appendChild(document.createElement('br'));
+    taskForm.appendChild(isTasksImportant);
+    taskForm.appendChild(importCheckBoxInput);
     taskForm.appendChild(document.createElement('br'));
     taskForm.appendChild(addTaskBtn);
     taskForm.appendChild(closeTaskBtn);

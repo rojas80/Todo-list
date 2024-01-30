@@ -1,7 +1,6 @@
 
 import noteJsonData from './notes.json'
-let newNoteJS = {
-}
+let newNoteJS = {};
 
 function loadNotesData(){
     fetch(noteJsonData).then(response => response.json()).then(data =>{
@@ -11,7 +10,7 @@ function loadNotesData(){
                 "title" : note.title,
                 "text": note.text
             }
-            createNoteDomElement(note.title, note.text);
+           //createNoteDomElement(note.title, note.text);
         }
     });
 
@@ -20,8 +19,10 @@ function loadNotesData(){
     const retrieveJsonObject = JSON.parse(retrieveJsonString);
     
     for(const key in retrieveJsonObject){
-        console.log("flag");
-        console.log(key);
+        createNoteDomElement(retrieveJsonObject[key].title, retrieveJsonObject[key].text);
+
+        console.log(retrieveJsonObject[key].title);
+        console.log(retrieveJsonObject[key].text);
     }
     console.log(retrieveJsonObject);
 
@@ -36,6 +37,7 @@ function createNoteDomElement(title, text){
 
     const noteTitle = document.createElement('p');
     noteTitle.textContent = title;
+
     const noteText = document.createElement('p');
     noteText.textContent = text;
 
@@ -65,12 +67,12 @@ function createNotesForm(){
     addNoteBtn.addEventListener('click', function(event){
         event.preventDefault();
         createNoteDomElement(notesDescriptionInput.value, notesText.value);
+        updateNoteJs(notesDescriptionInput.value, notesText.value);
+
         newNoteJS[notesDescriptionInput.value.replace(/\s/g,"").toLocaleLowerCase()] = {
             "title" : notesDescriptionInput.value,
             "text" : notesText.value
         }
-        console.log(newNoteJS);
-
         const jsonString = JSON.stringify(newNoteJS);
         localStorage.setItem('notes', jsonString);
 
