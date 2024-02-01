@@ -83,8 +83,16 @@ h2,h1{
     margin: 2%;
     background: #8FC1E3;
     height: 10vh;
-    width: 30vw;
+    width: 25vw;
     overflow: hidden;
+    position: relative;
+}
+.deleteNote{
+    position: absolute;
+    width: 18px;
+    top: 1vh;
+    right: 1vw;
+
 }
 
 

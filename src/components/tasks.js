@@ -3,39 +3,39 @@ import jsonData from '../components/task.json';
 
 let newTasks = {};
 
-function loadData(){
-  fetch(jsonData).then(response => response.json()).then(data => {
+fetch(jsonData).then(response => response.json()).then(data => {
     // Accessing properties
     for (const taskKey in data){
       const task = data[taskKey];
       newTasks[taskKey] = {
         "description": task.description,
         "notes": task.notes,
-        "Important" : task.important
+        "important" : task.important
       }
-      //createTaskDomElement(task.description,task.notes); delete later
     } 
-  });
+    const  tasksJsString = JSON.stringify(newTasks);
+    localStorage.setItem('tasks',tasksJsString);
+  }); 
 
+function loadData(){
   const retrieveJsonStringTask = localStorage.getItem("tasks");
   const retrieveJsonObjectTask = JSON.parse(retrieveJsonStringTask);
 
   for(const taskKey in retrieveJsonObjectTask){
-
 
     // const newTask = newTasks[newTasksKey];
     createTaskDomElement(retrieveJsonObjectTask[taskKey].description,retrieveJsonObjectTask[taskKey].notes);
   }
 }
 
-function updateNewTasks(description,notes){
+function updateNewTasks(description,notes, isImportant){
   let tempDescription = description;
   tempDescription = tempDescription.replace(/\s/g,"").toLowerCase();
 
   newTasks[tempDescription] = {
     "description": description,
     "notes": notes,
-    "important": false
+    "important": isImportant
   }
 
   const taskJsonString = JSON.stringify(newTasks);
@@ -55,7 +55,18 @@ function createTaskDomElement(description,notes){
     tasksNotes.textContent = notes
     const deleteElement = document.createElement('div');
     deleteElement.classList.add('deleteElement');
+    deleteElement.id = description;
     deleteElement.textContent = 'X';
+
+    deleteElement.addEventListener('click', function(){
+          let parentDiv  = deleteElement.parentNode;
+          parentDiv.parentNode.removeChild(parentDiv);
+          let tasks =  JSON.parse(localStorage.getItem('tasks'));
+          let tempKeyLowerCase = deleteElement.id;
+          tempKeyLowerCase = tempKeyLowerCase.replace(/\s/g,"").toLowerCase();
+          delete tasks[tempKeyLowerCase];
+          localStorage.setItem('tasks', JSON.stringify(tasks));
+    });
 
     domTasksElement.appendChild(tasksDescription);
     domTasksElement.appendChild(tasksNotes);
@@ -92,10 +103,10 @@ function createTaskForm(){
     //creating new DOM element for tasks buttons
     addTaskBtn.addEventListener('click', function(event){
       event.preventDefault();
-      createTaskDomElement(taskInput.value,taskNoteInput.value);
-      updateNewTasks(taskInput.value,taskNoteInput.value);
+      createTaskDomElement(taskInput.value, taskNoteInput.value);
+      updateNewTasks(taskInput.value, taskNoteInput.value, importCheckBoxInput.checked);
       document.querySelector('.taskForm-popup').style.display = 'none';
-      console.log(importCheckBoxInput.checked);
+      console.log(importCheckBoxInput.checked);// will ne needing this
 
     });
 
@@ -149,6 +160,7 @@ function tasks(){
 
     mainContainer.appendChild(createTaskFormBtn());
     loadData();
+    //deleteDomElementAndData();
 }
 
 export default tasks;
