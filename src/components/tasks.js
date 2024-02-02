@@ -56,7 +56,7 @@ function createTaskDomElement(description,notes){
     const deleteElement = document.createElement('div');
     deleteElement.classList.add('deleteElement');
     deleteElement.id = description;
-    deleteElement.textContent = 'X';
+    deleteElement.textContent = '';
 
     deleteElement.addEventListener('click', function(){
           let parentDiv  = deleteElement.parentNode;

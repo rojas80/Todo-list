@@ -16,7 +16,7 @@ function createDomElement(importantTasks){
             tasksNotes.textContent = importantTasks[key]['notes'];
             const deleteElement = document.createElement('div');
             deleteElement.classList.add('deleteElement');
-            deleteElement.textContent = 'X';
+            deleteElement.textContent = '';
 
             domTasksElement.appendChild(tasksDescription);
             domTasksElement.appendChild(tasksNotes);

@@ -2,8 +2,8 @@
 import noteJsonData from './notes.json'
 let newNoteJS = {};
 
-
-fetch(noteJsonData).then(response => response.json()).then(data =>{
+function loadNotesData(){
+    fetch(noteJsonData).then(response => response.json()).then(data =>{
         for(const noteKeys in data){
             const note = data[noteKeys];
             newNoteJS[noteKeys] = {
@@ -11,17 +11,20 @@ fetch(noteJsonData).then(response => response.json()).then(data =>{
                 "text": note.text
             }
         }
-        const notesJsString = JSON.stringify(newNoteJS);
-        localStorage.setItem('notes', notesJsString);
     });
 
-function loadNotesData(){
+
     const retrieveJsonString = localStorage.getItem("notes");
     const retrieveJsonObject = JSON.parse(retrieveJsonString);
     
     for(const key in retrieveJsonObject){
         createNoteDomElement(retrieveJsonObject[key].title, retrieveJsonObject[key].text);
+
+        console.log(retrieveJsonObject[key].title);
+        console.log(retrieveJsonObject[key].text);
     }
+    console.log(retrieveJsonObject);
+
 }
 
 function createNoteDomElement(title, text){
@@ -36,16 +39,15 @@ function createNoteDomElement(title, text){
 
     const noteText = document.createElement('p');
     noteText.textContent = text;
-    
-    const deleteNote  = document.createElement('div');
-    deleteNote.classList.add('deleteNote');
-    deleteNote.textContent  = "X";
-    deleteNote.id =  title;
 
+    const deleteNote = document.createElement('div');
+    deleteNote.classList.add('deleteNote');
+    deleteNote.textContent = '';
+    
     deleteNote.addEventListener('click', () =>{
-        let parentDiv  = deleteNote.parentNode;
+        let parentDiv = deleteNote.parentNode;
         parentDiv.parentNode.removeChild(parentDiv);
-        let tasks =  JSON.parse(localStorage.getItem('notes'));
+        let tasks = JSON.parse(localStorage.getItem('notes'));
         let tempKeyLowerCase = deleteNote.id;
         tempKeyLowerCase = tempKeyLowerCase.replace(/\s/g,"").toLowerCase();
         delete tasks[tempKeyLowerCase];
@@ -79,7 +81,7 @@ function createNotesForm(){
     addNoteBtn.addEventListener('click', function(event){
         event.preventDefault();
         createNoteDomElement(notesDescriptionInput.value, notesText.value);
-        // updateNoteJs(notesDescriptionInput.value, notesText.value);
+        //updateNoteJs(notesDescriptionInput.value, notesText.value);
 
         newNoteJS[notesDescriptionInput.value.replace(/\s/g,"").toLocaleLowerCase()] = {
             "title" : notesDescriptionInput.value,
@@ -87,6 +89,7 @@ function createNotesForm(){
         }
         const jsonString = JSON.stringify(newNoteJS);
         localStorage.setItem('notes', jsonString);
+
 
         document.querySelector('.notesForm-pop').style.display = 'none'
     });
@@ -106,20 +109,22 @@ function createNotesForm(){
     return notesForm;
 }
 function createNotesBtn(){
-    const mainContainer = document.createElement('div');
+    const notesBtnContainer = document.createElement('div');
+    notesBtnContainer.classList.add('notesBtnContainer');
 
     const creatNotesTaskBtn = document.createElement('button');
     creatNotesTaskBtn.classList.add('creatNotesFormBtn');
     creatNotesTaskBtn.textContent ='+ Add Note';
 
     creatNotesTaskBtn.addEventListener('click', function(){
+        console.log("add notes button");
         document.querySelector('.notesForm-pop').style.display = 'block';
     
     })
-    mainContainer.appendChild(creatNotesTaskBtn);
-    mainContainer.appendChild(createNotesForm());
+    notesBtnContainer.appendChild(creatNotesTaskBtn);
+    notesBtnContainer.appendChild(createNotesForm());
 
-    return mainContainer;
+    return notesBtnContainer;
 
 }
 function notes(){

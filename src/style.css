@@ -1,12 +1,13 @@
-/* 
-#eef2f5 light grey
-#113334 dark green //header text
-##d0492a orange
-*/
+
+:root{
+    --bgcolor: #6E60D1;
+    --secondaryColor: #C1C8E4
+}
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: white;
 }
 body{
     min-height: 100vh;
@@ -14,7 +15,7 @@ body{
     display: grid;
     grid-template-columns: 20vw 80vw;
     grid-template-rows: 10vh 80vh 10vh;
-    background: #F7F9FB;
+    background: linear-gradient( var(--bgcolor), var(--secondaryColor));
 }
 h2,h1{
     text-align: center;
@@ -35,10 +36,13 @@ h2,h1{
 .navBtn{
     padding: 5%;
     font-size: 2vh;
+    background:#904CE6;
+    border-radius: 10px;
+    margin: 1.5%;
 }
 /* mainContainer */
 .mainContainer{
-    border: 2px solid green;
+    text-align: center;
 }
 .taskContainer,.notesContainer{
     width: 79vw;
@@ -62,16 +66,45 @@ h2,h1{
     z-index: 1;
 }
 .domTaskElement{
-    border: 1px solid  blue;
+    height: 5vh;
     justify-content: space-between;
+    align-items: center;
+    padding: 2%;
+    border-radius: 10px;
+    margin: 1.5%;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    background: var(--secondaryColor);
 }
-.createTaskFormBtn{
-    width: 50%;
+.createTaskFormBtn, .creatNotesFormBtn{
+    width: 50vw;
+    border-radius: 10px;
+    height: 4vh;
+    background: #4C6BE6;
 }
 .taskFormBtn{
     width: 100%;
 }
+.deleteElement{
+    background: url("./icons/icons8-trash.svg") no-repeat;
+    height: 3vh;
+    width: 3vw;
+    cursor: pointer;
+}
+.deleteElement:hover{
+    transform: scale(1.1) translateZ(0);
+
+}
 /* important */
+
+/*  */
+.notesBtnContainer{
+    text-align: center;
+}
+.creatNotesFormBtn{
+    width: 50vw;
+}
+
+
 /* Notes */
 .notesContainer{
     display: grid;
@@ -81,18 +114,21 @@ h2,h1{
 .note{
     text-align: center;
     margin: 2%;
-    background: #8FC1E3;
     height: 10vh;
     width: 25vw;
     overflow: hidden;
     position: relative;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    background: var(--secondaryColor);
+    border-radius: 10px;
 }
 .deleteNote{
+    background: url("./icons/icons8-trash.svg") no-repeat;
     position: absolute;
-    width: 18px;
+    width: 3vw;
+    height: 3vh;
     top: 1vh;
     right: 1vw;
-
 }
 
 
