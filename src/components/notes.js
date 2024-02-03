@@ -36,6 +36,8 @@ function createNoteDomElement(title, text){
 
     const noteTitle = document.createElement('p');
     noteTitle.textContent = title;
+    noteTitle.style.fontWeight = 'bold';
+    noteTitle.style.fontSize = 'large';
 
     const noteText = document.createElement('p');
     noteText.textContent = text;
@@ -71,8 +73,12 @@ function createNotesForm(){
     const notesDescriptionInput = document.createElement('input');
     notesDescriptionInput.type = 'text';
 
-    const notesText =  document.createElement('input');
-    notesText.type = 'text';
+    const noteTitle = document.createElement('label');
+    noteTitle.textContent = 'Note'
+
+    const notesTextInput =  document.createElement('input');
+    notesTextInput.type = 'text';
+
     const addNoteBtn = document.createElement('button');
     addNoteBtn.textContent =  '+Add Note';
     const closeNoteFormBtn = document.createElement('button');
@@ -80,16 +86,14 @@ function createNotesForm(){
 
     addNoteBtn.addEventListener('click', function(event){
         event.preventDefault();
-        createNoteDomElement(notesDescriptionInput.value, notesText.value);
-        //updateNoteJs(notesDescriptionInput.value, notesText.value);
+        createNoteDomElement(notesDescriptionInput.value, notesTextInput.value);
 
         newNoteJS[notesDescriptionInput.value.replace(/\s/g,"").toLocaleLowerCase()] = {
             "title" : notesDescriptionInput.value,
-            "text" : notesText.value
+            "text" : notesTextInput.value
         }
         const jsonString = JSON.stringify(newNoteJS);
         localStorage.setItem('notes', jsonString);
-
 
         document.querySelector('.notesForm-pop').style.display = 'none'
     });
@@ -102,7 +106,8 @@ function createNotesForm(){
     notesForm.appendChild(noteDescription);
     notesForm.appendChild(notesDescriptionInput);
     notesForm.appendChild(document.createElement('br'))
-    notesForm.appendChild(notesText);
+    notesForm.appendChild(noteTitle);
+    notesForm.appendChild(notesTextInput);
     notesForm.appendChild(document.createElement('br'))
     notesForm.appendChild(addNoteBtn);
     notesForm.appendChild(closeNoteFormBtn);

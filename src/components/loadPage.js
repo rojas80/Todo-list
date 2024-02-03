@@ -1,5 +1,6 @@
 import sideBarContent from "./sideBarContent";
 import tasks from "./tasks";
+import logoImg from '../icons/GitHub_Logo.png';
 
 function creatHeader(){
     const header = document.createElement('header');
@@ -24,8 +25,13 @@ function createMainContainer(){
 }
 function createFooter(){
     const footer = document.createElement('footer');
-    footer.classList.add('footer');
-    footer.textContent='footer';
+    const gitHubLink = document.createElement('a');
+    gitHubLink.href = "https://github.com/rojas80/Todo-list";
+    const gitHubImg = document.createElement('img');
+    gitHubImg.classList.add('githublogo');
+    gitHubImg.src = logoImg;
+    gitHubLink.appendChild(gitHubImg);
+    footer.appendChild(gitHubLink);
     return footer;
 }
 function loadPage(){
